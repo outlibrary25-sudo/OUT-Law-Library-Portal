@@ -1,0 +1,2734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OUT Law Library Portal | Open University of Tanzania</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --primary-dark: #1e40af;
+            --secondary: #f59e0b;
+            --accent: #10b981;
+            --law-gold: #d4af37;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --glass: rgba(30, 41, 59, 0.8);
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Accessibility Features */
+        .accessibility-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            background: var(--glass);
+            padding: 10px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+        }
+
+        .accessibility-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .accessibility-btn:hover {
+            background: var(--primary-light);
+            transform: scale(1.1);
+        }
+
+        .accessibility-btn.active {
+            background: var(--secondary);
+            color: var(--bg-dark);
+        }
+
+        /* High Contrast Mode */
+        body.high-contrast {
+            --bg-dark: #000;
+            --bg-card: #000;
+            --text-primary: #fff;
+            --text-secondary: #fff;
+            --border: #fff;
+            --primary: #ffff00;
+            --primary-light: #ffff00;
+        }
+
+        /* Large Text Mode */
+        body.large-text {
+            font-size: 120%;
+        }
+
+        body.large-text h1 { font-size: 3rem; }
+        body.large-text h2 { font-size: 2.2rem; }
+        body.large-text h3 { font-size: 1.8rem; }
+
+        /* Screen Reader Only */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Particle Background */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            transition: all 0.3s;
+        }
+
+        .navbar.scrolled {
+            padding: 0.5rem 2rem;
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--law-gold));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); }
+            50% { box-shadow: 0 0 50px rgba(212, 175, 55, 0.6); }
+        }
+
+        .logo-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--law-gold);
+            margin: 0;
+        }
+
+        .logo-text p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--law-gold);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--law-gold);
+            color: var(--law-gold);
+        }
+
+        .btn-secondary:hover {
+            background: var(--law-gold);
+            color: var(--bg-dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            width: 100%;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--law-gold);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            color: var(--law-gold);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--law-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+        }
+
+        /* AI Search Hub */
+        .search-hub {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .search-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .search-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.875rem;
+        }
+
+        .search-tab.active, .search-tab:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .ai-assist-btn {
+            position: absolute;
+            right: 100px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, var(--secondary), #fbbf24);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: var(--bg-dark);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px var(--secondary); }
+            50% { box-shadow: 0 0 20px var(--secondary), 0 0 40px var(--secondary); }
+        }
+
+        .voice-search {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .voice-search:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-chip {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--primary-light);
+            color: var(--primary-light);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-chip:hover {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        /* Quick Stats */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--law-gold);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.1);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 24px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--law-gold);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Resources Grid */
+        .resources-section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .resource-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--law-gold), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .resource-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border-color: var(--primary-light);
+        }
+
+        .resource-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.3), rgba(30, 41, 59, 0.5));
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .resource-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+        }
+
+        .resource-title {
+            flex: 1;
+        }
+
+        .resource-title h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            margin: 0 0 0.25rem;
+        }
+
+        .resource-title span {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: rgba(16, 185, 129, 0.2);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .resource-content {
+            padding: 1.5rem;
+        }
+
+        .resource-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .resource-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-tag {
+            padding: 0.25rem 0.5rem;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: var(--primary-light);
+        }
+
+        .resource-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--law-gold);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .resource-link:hover {
+            gap: 1rem;
+            color: var(--secondary);
+        }
+
+        /* Category Filter */
+        .category-filter {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            border: 2px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .category-btn.active, .category-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* AI Assistant Panel */
+        .ai-panel {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 380px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            z-index: 99;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .ai-panel.minimized {
+            height: 60px;
+            width: 60px;
+            border-radius: 50%;
+        }
+
+        .ai-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .ai-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .ai-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .ai-control-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-body {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ai-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .ai-message {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+
+        .ai-message.user {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+        }
+
+        .ai-message.bot {
+            align-self: flex-start;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .ai-input-area {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .ai-input {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .ai-send {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--accent);
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Login Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--border);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .modal h2 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .modal-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .biometric-login {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .biometric-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .biometric-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Admin Dashboard (Hidden by default) */
+        .admin-dashboard {
+            display: none;
+            padding: 100px 2rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .admin-dashboard.active {
+            display: block;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+
+        .admin-sidebar {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .admin-menu {
+            list-style: none;
+        }
+
+        .admin-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .admin-menu a:hover, .admin-menu a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .admin-content {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .admin-stat {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .admin-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--law-gold);
+        }
+
+        /* User Dashboard */
+        .user-dashboard {
+            display: none;
+            padding: 100px 2rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .user-dashboard.active {
+            display: block;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h4 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 1rem;
+            color: var(--law-gold);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-in {
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .resources-grid { grid-template-columns: 1fr; }
+            .ai-panel { width: calc(100% - 40px); right: 20px; left: 20px; }
+            .admin-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Loading Animation */
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--border);
+            border-bottom-color: var(--law-gold);
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 1001;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--error); }
+        .toast.warning { border-left: 4px solid var(--warning); }
+
+        /* Reading Progress */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--law-gold));
+            z-index: 10000;
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        /* Dropdown Menu Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: var(--bg-card);
+            min-width: 250px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            z-index: 1000;
+            top: 100%;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .dropdown-content.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .dropdown-item {
+            padding: 1rem 1.5rem;
+            display: block;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .dropdown-item i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .dropdown-header {
+            padding: 0.75rem 1.5rem;
+            background: var(--glass);
+            color: var(--law-gold);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .has-dropdown {
+            position: relative;
+        }
+
+        .has-dropdown::after {
+            content: '\f107';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-left: 0.5rem;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress" id="readingProgress"></div>
+
+    <!-- Accessibility Controls -->
+    <div class="accessibility-controls" role="toolbar" aria-label="Accessibility Controls">
+        <button class="accessibility-btn" onclick="toggleHighContrast()" title="High Contrast Mode" aria-label="Toggle high contrast">
+            <i class="fas fa-adjust"></i>
+        </button>
+        <button class="accessibility-btn" onclick="toggleLargeText()" title="Large Text Mode" aria-label="Toggle large text">
+            <i class="fas fa-font"></i>
+        </button>
+        <button class="accessibility-btn" onclick="toggleScreenReader()" title="Screen Reader Support" aria-label="Toggle screen reader">
+            <i class="fas fa-volume-up"></i>
+        </button>
+        <button class="accessibility-btn" onclick="resetAccessibility()" title="Reset" aria-label="Reset accessibility settings">
+            <i class="fas fa-undo"></i>
+        </button>
+    </div>
+
+    <!-- Particle Canvas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Operation successful</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo-section">
+                <div class="logo" aria-label="OUT Law Library Logo">
+                    <i class="fas fa-balance-scale"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>OUT Law Library</h1>
+                    <p>Justice Through Knowledge</p>
+                </div>
+            </div>
+            
+            <ul class="nav-links" role="navigation">
+                <li><a href="#resources" onclick="showSection('home')">Resources</a></li>
+                <li><a href="https://search.ebscohost.com" target="_blank" onclick="trackAccess('EBSCOhost E-Books')">E-Books</a></li>
+                <li class="dropdown">
+                    <a href="#" class="has-dropdown" onclick="toggleJournalDropdown(event)">Journals</a>
+                    <div class="dropdown-content" id="journalDropdown">
+                        <div class="dropdown-header">Select Journal Type</div>
+                        <a href="#subscribed-journals" class="dropdown-item" onclick="showSubscribedJournals(event)">
+                            <i class="fas fa-star" style="color: var(--law-gold);"></i> Subscribed Journals
+                        </a>
+                        <a href="#open-access-journals" class="dropdown-item" onclick="showOpenAccessJournals(event)">
+                            <i class="fas fa-lock-open" style="color: var(--accent);"></i> Open Access Journals
+                        </a>
+                    </div>
+                </li>
+                <li><a href="https://repository.out.ac.tz" target="_blank" onclick="trackAccess('OUT Repository')">Repository</a></li>
+                <li><a href="https://koha.out.ac.tz" target="_blank" onclick="trackAccess('OUT Library Catalogue')">Catalogue</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="btn btn-secondary" onclick="openLoginModal('user')">
+                    <i class="fas fa-user"></i> Student Login
+                </button>
+                <button class="btn btn-primary" onclick="openLoginModal('admin')">
+                    <i class="fas fa-shield-alt"></i> Admin
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="mainContent">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-robot"></i>
+                    <span>Powered by AI & Industry 4.0</span>
+                </div>
+                
+                <h1>Legal Research Reimagined</h1>
+                <p>Access comprehensive legal resources from Tanzania and beyond. Featuring AI-powered search, voice navigation, and accessibility-first design for the Open University of Tanzania community.</p>
+
+                <!-- AI Search Hub -->
+                <div class="search-hub">
+                    <div class="search-tabs" role="tablist">
+                        <button class="search-tab active" role="tab" onclick="setSearchType('all')">All Resources</button>
+                        <button class="search-tab" role="tab" onclick="setSearchType('cases')">Case Law</button>
+                        <button class="search-tab" role="tab" onclick="setSearchType('legislation')">Legislation</button>
+                        <button class="search-tab" role="tab" onclick="setSearchType('journals')">Journals</button>
+                        <button class="search-tab" role="tab" onclick="setSearchType('textbooks')">E-Textbooks</button>
+                    </div>
+
+                    <div class="search-box">
+                        <input type="text" class="search-input" id="mainSearch" placeholder="Search legal resources, cases, legislation, journals..." aria-label="Search legal resources">
+                        <button class="ai-assist-btn" onclick="activateAIAssist()">
+                            <i class="fas fa-sparkles"></i> AI Assist
+                        </button>
+                        <button class="voice-search" onclick="startVoiceSearch()" aria-label="Voice search">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+
+                    <div class="search-filters">
+                        <span class="filter-chip" onclick="quickSearch('Tanzania Law Reports')">Tanzania Law Reports</span>
+                        <span class="filter-chip" onclick="quickSearch('High Court Decisions')">High Court Decisions</span>
+                        <span class="filter-chip" onclick="quickSearch('Constitution')">Constitution</span>
+                        <span class="filter-chip" onclick="quickSearch('Human Rights')">Human Rights</span>
+                        <span class="filter-chip" onclick="quickSearch('International Law')">International Law</span>
+                        <span class="filter-chip" onclick="quickSearch('Commercial Law')">Commercial Law</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-card fade-in">
+                <div class="stat-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div class="stat-number" id="statBooks">50,000+</div>
+                <div class="stat-label">Legal Resources</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-icon">
+                    <i class="fas fa-gavel"></i>
+                </div>
+                <div class="stat-number" id="statCases">15,000+</div>
+                <div class="stat-label">Court Decisions</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="stat-number" id="statJournals">500+</div>
+                <div class="stat-label">Law Journals</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-number" id="statUsers">12,000+</div>
+                <div class="stat-label">Active Users</div>
+            </div>
+        </div>
+
+        <!-- Resources Section -->
+        <section class="resources-section" id="resources">
+            <div class="section-header">
+                <h2>Legal Resource Databases</h2>
+                <p>Comprehensive access to Tanzanian and international legal materials, powered by Industry 4.0 technologies</p>
+            </div>
+
+            <div class="category-filter">
+                <button class="category-btn active" onclick="filterResources('all')">All Resources</button>
+                <button class="category-btn" onclick="filterResources('primary')">Primary Law</button>
+                <button class="category-btn" onclick="filterResources('secondary')">Secondary Sources</button>
+                <button class="category-btn" onclick="filterResources('international')">International</button>
+                <button class="category-btn" onclick="filterResources('open')">Open Access</button>
+            </div>
+
+            <div class="resources-grid" id="resourcesGrid">
+                <!-- E-Textbooks -->
+                <article class="resource-card" data-category="secondary">
+                    <div class="resource-header">
+                        <div class="resource-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>EBSCOhost E-Textbooks</h3>
+                            <span><i class="fas fa-check-circle"></i> Subscribed</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Comprehensive collection of law textbooks, treatises, and legal commentaries. Access authoritative texts on constitutional law, criminal law, commercial law, and international law. Features AI-powered full-text search and citation tools.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">Full Text</span>
+                            <span class="feature-tag">Downloadable</span>
+                            <span class="feature-tag">Citations</span>
+                            <span class="feature-tag">AI Search</span>
+                        </div>
+                        <a href="https://search.ebscohost.com" target="_blank" class="resource-link" onclick="trackAccess('EBSCOhost')">
+                            Access Database <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Tanzania Legal Information Institute (TanzLII) -->
+                <article class="resource-card" data-category="primary">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>Tanzania Law Reports (TanzLII)</h3>
+                            <span><i class="fas fa-globe"></i> Open Access</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Tanzania Legal Information Institute (TanzLII) provides free access to Tanzanian legal information including High Court judgments, Court of Appeal decisions, legislation, Tanzania Law Reports, and Government Gazette notices. Essential for Tanzanian legal research and precedent analysis.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">Case Law</span>
+                            <span class="feature-tag">Legislation</span>
+                            <span class="feature-tag">Government Gazette</span>
+                            <span class="feature-tag">Free Access</span>
+                        </div>
+                        <a href="https://tanzlii.org/" target="_blank" class="resource-link" onclick="trackAccess('TanzLII')">
+                            Access TanzLII <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Tanzania Human Rights Commission -->
+                <article class="resource-card" data-category="primary">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>Tanzania Human Rights Reports</h3>
+                            <span><i class="fas fa-globe"></i> Open Access</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Comprehensive reports from the Tanzania Human Rights Commission (CHRAGG) Resources Center covering civil, political, economic, social, and cultural rights. Includes UPR reports, treaty monitoring documents, human rights advocacy materials, and annual reports on human rights situation in Tanzania.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">UPR Reports</span>
+                            <span class="feature-tag">Treaty Monitoring</span>
+                            <span class="feature-tag">Advocacy Materials</span>
+                            <span class="feature-tag">Free Access</span>
+                        </div>
+                        <a href="https://humanrights.or.tz/resources-center" target="_blank" class="resource-link" onclick="trackAccess('THRDC')">
+                            Access Reports <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- JSTOR -->
+                <article class="resource-card" data-category="secondary">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                            <i class="fas fa-archive"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>JSTOR Legal Collection</h3>
+                            <span><i class="fas fa-check-circle"></i> Subscribed</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Premier digital library of academic journals, books, and primary sources. Law collection includes core journals in legal history, philosophy, international law, and comparative law with deep backfiles and current issues.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">Peer Reviewed</span>
+                            <span class="feature-tag">Deep Archive</span>
+                            <span class="feature-tag">Citations</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://www.jstor.org" target="_blank" class="resource-link" onclick="trackAccess('JSTOR')">
+                            Access JSTOR <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- SAGE Journals -->
+                <article class="resource-card" data-category="secondary">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #ec4899, #db2777);">
+                            <i class="fas fa-scroll"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>SAGE Law Journals</h3>
+                            <span><i class="fas fa-check-circle"></i> Subscribed</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Leading international publisher of law and criminology journals. Access cutting-edge research in criminal justice, international law, human rights law, and socio-legal studies with advanced search and alert features.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">Current Issues</span>
+                            <span class="feature-tag">Alerts</span>
+                            <span class="feature-tag">Mobile App</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://journals.sagepub.com" target="_blank" class="resource-link" onclick="trackAccess('SAGE')">
+                            Access SAGE <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Taylor & Francis -->
+                <article class="resource-card" data-category="secondary">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>Taylor & Francis Law</h3>
+                            <span><i class="fas fa-check-circle"></i> Subscribed</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Extensive collection of law journals covering commonwealth law, international trade law, environmental law, and legal education. Features interdisciplinary approach connecting law with politics, economics, and society.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">Commonwealth Focus</span>
+                            <span class="feature-tag">Interdisciplinary</span>
+                            <span class="feature-tag">RSS Feeds</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://www.tandfonline.com" target="_blank" class="resource-link" onclick="trackAccess('TaylorFrancis')">
+                            Access T&F <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Open Access Journals -->
+                <article class="resource-card" data-category="open">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                            <i class="fas fa-lock-open"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>Utrecht Journal of International Law</h3>
+                            <span><i class="fas fa-lock-open"></i> Open Access</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Student-led international law journal from Utrecht University covering public international law, international criminal law, and human rights. Peer-reviewed articles with global perspective on contemporary legal issues.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">Peer Reviewed</span>
+                            <span class="feature-tag">Student Led</span>
+                            <span class="feature-tag">Free Access</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://utrechtjournal.org/" target="_blank" class="resource-link" onclick="trackAccess('Utrecht')">
+                            Access Journal <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Cambridge International Law -->
+                <article class="resource-card" data-category="open">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #f97316, #ea580c);">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>Leiden Journal of International Law</h3>
+                            <span><i class="fas fa-lock-open"></i> Open Access</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Premier Cambridge journal focusing on theoretical and practical issues of public international law. Features articles, case notes, and book reviews from leading scholars with emphasis on international legal theory.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">Cambridge</span>
+                            <span class="feature-tag">Theory Focus</span>
+                            <span class="feature-tag">Free Access</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://www.cambridge.org/core/journals/leiden-journal-of-international-law" target="_blank" class="resource-link" onclick="trackAccess('Leiden')">
+                            Access Journal <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- International Journal of Legal Information -->
+                <article class="resource-card" data-category="open">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>Int'l Journal of Legal Information</h3>
+                            <span><i class="fas fa-lock-open"></i> Open Access</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Official publication of the International Association of Law Libraries. Covers comparative law, foreign law, international law, and legal information management. Essential for legal research methodology.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">IALL Official</span>
+                            <span class="feature-tag">Research Methods</span>
+                            <span class="feature-tag">Free Access</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://www.cambridge.org/core/journals/international-journal-of-legal-information/open-access" target="_blank" class="resource-link" onclick="trackAccess('IJLI')">
+                            Access Journal <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Amicus Curiae -->
+                <article class="resource-card" data-category="open">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #14b8a6, #0d9488);">
+                            <i class="fas fa-balance-scale-left"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>Amicus Curiae</h3>
+                            <span><i class="fas fa-lock-open"></i> Open Access</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Journal of the Institute of Advanced Legal Studies covering legal practice, legal education, and access to justice. Features contributions from practitioners, academics, and students on contemporary legal developments.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">SAS London</span>
+                            <span class="feature-tag">Practice Focus</span>
+                            <span class="feature-tag">Free Access</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://journals.sas.ac.uk/index.php/amicus" target="_blank" class="resource-link" onclick="trackAccess('Amicus')">
+                            Access Journal <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Edinburgh Student Law Review -->
+                <article class="resource-card" data-category="open">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #a855f7, #9333ea);">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>Edinburgh Student Law Review</h3>
+                            <span><i class="fas fa-lock-open"></i> Open Access</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Scotland's premier student-edited law review publishing articles, case comments, and book reviews across all areas of Scots, UK, and international law. Platform for emerging legal scholars to publish research.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">Student Edited</span>
+                            <span class="feature-tag">Scotland Focus</span>
+                            <span class="feature-tag">Free Access</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://journals.sas.ac.uk/deeslr/" target="_blank" class="resource-link" onclick="trackAccess('Edinburgh')">
+                            Access Journal <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Law, Environment and Development Journal -->
+                <article class="resource-card" data-category="open">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #84cc16, #65a30d);">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>Law, Environment & Development Journal</h3>
+                            <span><i class="fas fa-lock-open"></i> Open Access</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Peer-reviewed journal focusing on environmental law and sustainable development in developing countries. Published by SOAS, covers climate law, biodiversity, and environmental justice with Global South perspective.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">Environmental</span>
+                            <span class="feature-tag">Development</span>
+                            <span class="feature-tag">Free Access</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://www.lead-journal.org/" target="_blank" class="resource-link" onclick="trackAccess('LEAD')">
+                            Access Journal <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Oslo Law Review -->
+                <article class="resource-card" data-category="open">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                            <i class="fas fa-bookmark"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>Oslo Law Review</h3>
+                            <span><i class="fas fa-lock-open"></i> Open Access</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Nordic journal of legal scholarship covering Scandinavian law, comparative law, and European law. Features articles in English on constitutional law, administrative law, and legal theory from University of Oslo.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">Nordic Focus</span>
+                            <span class="feature-tag">Comparative</span>
+                            <span class="feature-tag">Free Access</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://www.idunn.no/journal/oslo_law_review" target="_blank" class="resource-link" onclick="trackAccess('Oslo')">
+                            Access Journal <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Bologna Law Review -->
+                <article class="resource-card" data-category="open">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                            <i class="fas fa-landmark-flag"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>Bologna Law Review</h3>
+                            <span><i class="fas fa-lock-open"></i> Open Access</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Student-edited law review from University of Bologna covering European law, international law, and comparative legal studies. Multilingual contributions with focus on EU law and Italian legal developments.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">European Law</span>
+                            <span class="feature-tag">Student Edited</span>
+                            <span class="feature-tag">Free Access</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://lawreview.unibo.it/" target="_blank" class="resource-link" onclick="trackAccess('Bologna')">
+                            Access Journal <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- QUT Law Review -->
+                <article class="resource-card" data-category="open">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                            <i class="fas fa-scale-balanced"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>QUT Law Review</h3>
+                            <span><i class="fas fa-lock-open"></i> Open Access</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Double-blind peer-reviewed journal from Queensland University of Technology. Covers technology law, intellectual property, criminal law, and legal education with Asia-Pacific focus and interdisciplinary approach.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">Technology Law</span>
+                            <span class="feature-tag">Asia-Pacific</span>
+                            <span class="feature-tag">Free Access</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://lthj.qut.edu.au/" target="_blank" class="resource-link" onclick="trackAccess('QUT')">
+                            Access Journal <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Cambridge International Law Journal -->
+                <article class="resource-card" data-category="open">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>Cambridge Int'l Law Journal</h3>
+                            <span><i class="fas fa-lock-open"></i> Open Access</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Student-edited journal from Cambridge University covering public and private international law. Features articles, case notes, and book reviews with emphasis on current developments in international legal practice.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">Cambridge</span>
+                            <span class="feature-tag">Student Led</span>
+                            <span class="feature-tag">Free Access</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://cilj.co.uk/" target="_blank" class="resource-link" onclick="trackAccess('CILJ')">
+                            Access Journal <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- African Journals Online (AJOL) -->
+                <article class="resource-card" data-category="open">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #059669, #10b981);">
+                            <i class="fas fa-globe-africa"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>African Journals Online (AJOL)</h3>
+                            <span><i class="fas fa-lock-open"></i> Open Access</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            The world's largest and preeminent platform of African-published scholarly journals. AJOL provides access to over 268 fee-free open access journals with 165,176+ open access full text articles from across the African continent covering law, social sciences, and humanities.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">African Research</span>
+                            <span class="feature-tag">278,651+ Articles</span>
+                            <span class="feature-tag">Free Access</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://www.ajol.info/index.php/ajol" target="_blank" class="resource-link" onclick="trackAccess('AJOL')">
+                            Access AJOL <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- OUT Institutional Repository -->
+                <article class="resource-card" data-category="primary">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
+                            <i class="fas fa-building-columns"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>OUT Institutional Repository</h3>
+                            <span><i class="fas fa-university"></i> OUT Official</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Digital archive of Open University of Tanzania's scholarly output including law theses, dissertations, faculty publications, and research papers. Preserves and provides access to OUT's academic contributions to legal scholarship.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">Theses</span>
+                            <span class="feature-tag">Research</span>
+                            <span class="feature-tag">Faculty Works</span>
+                            <span class="feature-tag">Full Text</span>
+                        </div>
+                        <a href="https://repository.out.ac.tz" target="_blank" class="resource-link" onclick="trackAccess('Repository')">
+                            Access Repository <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Koha Library Catalogue -->
+                <article class="resource-card" data-category="primary">
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(135deg, #059669, #10b981);">
+                            <i class="fas fa-book-reader"></i>
+                        </div>
+                        <div class="resource-title">
+                            <h3>OUT Library Catalogue (Koha)</h3>
+                            <span><i class="fas fa-university"></i> OUT Official</span>
+                        </div>
+                    </div>
+                    <div class="resource-content">
+                        <p class="resource-description">
+                            Comprehensive library management system providing access to OUT's physical and digital collections. Search for books, journals, reserve materials, and manage loans, renewals, and holds through the OPAC interface.
+                        </p>
+                        <div class="resource-features">
+                            <span class="feature-tag">OPAC</span>
+                            <span class="feature-tag">Loan Management</span>
+                            <span class="feature-tag">Reserves</span>
+                            <span class="feature-tag">Full Catalogue</span>
+                        </div>
+                        <a href="https://koha.out.ac.tz" target="_blank" class="resource-link" onclick="trackAccess('Koha')">
+                            Access Catalogue <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-dashboard" id="adminDashboard">
+        <div class="admin-header">
+            <div>
+                <h1>Administrator Dashboard</h1>
+                <p>Welcome back, Nelson Samwel</p>
+            </div>
+            <button class="btn btn-secondary" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+
+        <div class="admin-grid">
+            <aside class="admin-sidebar">
+                <ul class="admin-menu">
+                    <li><a href="#" class="active" onclick="showAdminSection('overview')"><i class="fas fa-chart-line"></i> Overview</a></li>
+                    <li><a href="#" onclick="showAdminSection('users')"><i class="fas fa-users"></i> User Management</a></li>
+                    <li><a href="#" onclick="showAdminSection('resources')"><i class="fas fa-database"></i> Resources</a></li>
+                    <li><a href="#" onclick="showAdminSection('analytics')"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                    <li><a href="#" onclick="showAdminSection('accessibility')"><i class="fas fa-universal-access"></i> Accessibility</a></li>
+                    <li><a href="#" onclick="showAdminSection('settings')"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </aside>
+
+            <div class="admin-content" id="adminContent">
+                <div class="stats-grid">
+                    <div class="admin-stat">
+                        <div class="stat-label">Total Users</div>
+                        <div class="admin-stat-value">12,847</div>
+                        <small style="color: var(--success)"><i class="fas fa-arrow-up"></i> +5.2%</small>
+                    </div>
+                    <div class="admin-stat">
+                        <div class="stat-label">Active Sessions</div>
+                        <div class="admin-stat-value">342</div>
+                        <small style="color: var(--success)"><i class="fas fa-arrow-up"></i> +12%</small>
+                    </div>
+                    <div class="admin-stat">
+                        <div class="stat-label">Resources Accessed</div>
+                        <div class="admin-stat-value">45,231</div>
+                        <small style="color: var(--success)"><i class="fas fa-arrow-up"></i> +8.7%</small>
+                    </div>
+                    <div class="admin-stat">
+                        <div class="stat-label">AI Queries</div>
+                        <div class="admin-stat-value">8,945</div>
+                        <small style="color: var(--success)"><i class="fas fa-arrow-up"></i> +23%</small>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 1rem;">Recent Activity</h3>
+                <div style="background: var(--bg-dark); border-radius: 12px; padding: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid var(--border);">
+                        <span><i class="fas fa-user-plus" style="color: var(--accent);"></i> New user registered: OUT/2026/2847</span>
+                        <span style="color: var(--text-secondary);">2 mins ago</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid var(--border);">
+                        <span><i class="fas fa-book" style="color: var(--primary-light);"></i> High volume access: TanzLII</span>
+                        <span style="color: var(--text-secondary);">5 mins ago</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid var(--border);">
+                        <span><i class="fas fa-robot" style="color: var(--secondary);"></i> AI Assistant handled 50 queries</span>
+                        <span style="color: var(--text-secondary);">10 mins ago</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 1rem 0;">
+                        <span><i class="fas fa-universal-access" style="color: var(--accent);"></i> Accessibility mode activated (3 users)</span>
+                        <span style="color: var(--text-secondary);">15 mins ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Dashboard -->
+    <div class="user-dashboard" id="userDashboard">
+        <div class="admin-header">
+            <div>
+                <h1>My Library Portal</h1>
+                <p>Personalized legal research workspace</p>
+            </div>
+            <button class="btn btn-secondary" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+
+        <div class="admin-grid">
+            <aside class="admin-sidebar">
+                <ul class="admin-menu">
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-history"></i> Recent Searches</a></li>
+                    <li><a href="#"><i class="fas fa-bookmark"></i> Saved Resources</a></li>
+                    <li><a href="#"><i class="fas fa-download"></i> Downloads</a></li>
+                    <li><a href="#"><i class="fas fa-citations"></i> Citation Manager</a></li>
+                    <li><a href="#"><i class="fas fa-bell"></i> Alerts</a></li>
+                </ul>
+            </aside>
+
+            <div class="admin-content">
+                <div class="stats-grid">
+                    <div class="admin-stat">
+                        <div class="stat-label">Saved Resources</div>
+                        <div class="admin-stat-value">24</div>
+                    </div>
+                    <div class="admin-stat">
+                        <div class="stat-label">Recent Searches</div>
+                        <div class="admin-stat-value">18</div>
+                    </div>
+                    <div class="admin-stat">
+                        <div class="stat-label">Downloads</div>
+                        <div class="admin-stat-value">156</div>
+                    </div>
+                    <div class="admin-stat">
+                        <div class="stat-label">Citations</div>
+                        <div class="admin-stat-value">42</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 1rem;">Recommended for You</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div style="background: var(--bg-dark); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border);">
+                        <i class="fas fa-gavel" style="color: var(--law-gold); font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <h4>Recent High Court Decisions</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">Based on your search history</p>
+                    </div>
+                    <div style="background: var(--bg-dark); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border);">
+                        <i class="fas fa-book" style="color: var(--primary-light); font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <h4>Constitutional Law Updates</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">New articles in your field</p>
+                    </div>
+                    <div style="background: var(--bg-dark); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border);">
+                        <i class="fas fa-globe" style="color: var(--accent); font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <h4>International Law Journal</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.5rem;">Latest open access issue</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Assistant Panel -->
+    <div class="ai-panel" id="aiPanel">
+        <div class="ai-header" onclick="toggleAIPanel()">
+            <div class="ai-title">
+                <i class="fas fa-robot"></i>
+                <span>LexAI Assistant</span>
+            </div>
+            <div class="ai-controls">
+                <button class="ai-control-btn" onclick="event.stopPropagation(); toggleAIPanel()">
+                    <i class="fas fa-minus" id="aiMinimizeIcon"></i>
+                </button>
+            </div>
+        </div>
+        <div class="ai-body" id="aiBody">
+            <div class="ai-messages" id="aiMessages">
+                <div class="ai-message bot">
+                    Hello! I'm LexAI, your legal research assistant. I can help you find cases, explain legal concepts, or guide you through our databases. How can I assist you today?
+                </div>
+            </div>
+            <div class="ai-input-area">
+                <input type="text" class="ai-input" id="aiInput" placeholder="Ask about legal resources..." onkeypress="handleAIInput(event)">
+                <button class="ai-send" onclick="sendAIMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeLoginModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <h2 id="modalTitle">Student Login</h2>
+            <p class="modal-subtitle" id="modalSubtitle">Access your personalized legal research workspace</p>
+            
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required placeholder="Enter your username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" required placeholder="Enter your password">
+                        <button type="button" class="toggle-password" onclick="togglePassword()">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group" id="roleSelect" style="display: none;">
+                    <label for="role">Login As</label>
+                    <select id="role">
+                        <option value="student">Student</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Secure Login
+                </button>
+            </form>
+
+            <div class="biometric-login">
+                <button class="biometric-btn" onclick="simulateBiometric()">
+                    <i class="fas fa-fingerprint"></i> Login with Biometrics
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>OUT Law Library</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                    Empowering legal education through technology and accessible knowledge resources for the Open University of Tanzania community.
+                </p>
+                <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+                    <a href="#" style="color: var(--text-secondary); font-size: 1.5rem;"><i class="fab fa-twitter"></i></a>
+                    <a href="#" style="color: var(--text-secondary); font-size: 1.5rem;"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" style="color: var(--text-secondary); font-size: 1.5rem;"><i class="fab fa-facebook"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="https://www.out.ac.tz" target="_blank">OUT Main Website</a></li>
+                    <li><a href="https://koha.out.ac.tz" target="_blank">Library Catalogue</a></li>
+                    <li><a href="https://repository.out.ac.tz" target="_blank">Institutional Repository</a></li>
+                    <li><a href="https://out.ac.tz/student-portal" target="_blank">Student Portal</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Legal Resources</h4>
+                <ul>
+                    <li><a href="https://tanzlii.org/" target="_blank">Tanzania Law Reports</a></li>
+                    <li><a href="https://www.jstor.org" target="_blank">JSTOR</a></li>
+                    <li><a href="https://search.ebscohost.com" target="_blank">EBSCOhost</a></li>
+                    <li><a href="https://humanrights.or.tz/resources-center" target="_blank">Human Rights Commission</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Accessibility Guide</a></li>
+                    <li><a href="#">Research Guides</a></li>
+                    <li><a href="#">Contact Librarian</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Open University of Tanzania. All rights reserved. | Designed for Industry 4.0</p>
+            <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                <i class="fas fa-shield-alt"></i> Secured with Blockchain Verification | <i class="fas fa-universal-access"></i> WCAG 2.1 AA Compliant
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Global State
+        let currentUser = null;
+        let userRole = null;
+        let isHighContrast = false;
+        let isLargeText = false;
+        let isScreenReader = false;
+        let loginType = 'user';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initParticles();
+            initScrollEffects();
+            initReadingProgress();
+            animateStats();
+        });
+
+        // Particle Background
+        function initParticles() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 1,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    opacity: Math.random() * 0.5 + 0.1
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+
+                    if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(212, 175, 55, ${particle.opacity})`;
+                    ctx.fill();
+                });
+
+                // Connect nearby particles
+                particles.forEach((p1, i) => {
+                    particles.slice(i + 1).forEach(p2 => {
+                        const dx = p1.x - p2.x;
+                        const dy = p1.y - p2.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < 150) {
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.strokeStyle = `rgba(59, 130, 246, ${0.1 * (1 - distance / 150)})`;
+                            ctx.stroke();
+                        }
+                    });
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+
+        // Scroll Effects
+        function initScrollEffects() {
+            const navbar = document.getElementById('navbar');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Intersection Observer for fade-in animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.resource-card, .stat-card').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Reading Progress
+        function initReadingProgress() {
+            const progressBar = document.getElementById('readingProgress');
+            
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                progressBar.style.width = scrolled + '%';
+            });
+        }
+
+        // Animate Stats
+        function animateStats() {
+            const stats = ['statBooks', 'statCases', 'statJournals', 'statUsers'];
+            const targets = [50000, 15000, 500, 12000];
+            
+            stats.forEach((id, index) => {
+                const element = document.getElementById(id);
+                let current = 0;
+                const increment = targets[index] / 100;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= targets[index]) {
+                        element.textContent = targets[index].toLocaleString() + '+';
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(current).toLocaleString() + '+';
+                    }
+                }, 20);
+            });
+        }
+
+        // Accessibility Functions
+        function toggleHighContrast() {
+            isHighContrast = !isHighContrast;
+            document.body.classList.toggle('high-contrast');
+            showToast(isHighContrast ? 'High contrast mode enabled' : 'High contrast mode disabled', 'success');
+            announceToScreenReader(isHighContrast ? 'High contrast mode enabled' : 'High contrast mode disabled');
+        }
+
+        function toggleLargeText() {
+            isLargeText = !isLargeText;
+            document.body.classList.toggle('large-text');
+            showToast(isLargeText ? 'Large text mode enabled' : 'Large text mode disabled', 'success');
+            announceToScreenReader(isLargeText ? 'Large text mode enabled' : 'Large text mode disabled');
+        }
+
+        function toggleScreenReader() {
+            isScreenReader = !isScreenReader;
+            showToast(isScreenReader ? 'Screen reader optimizations enabled' : 'Screen reader optimizations disabled', 'success');
+            announceToScreenReader(isScreenReader ? 'Screen reader mode active' : 'Screen reader mode disabled');
+        }
+
+        function resetAccessibility() {
+            isHighContrast = false;
+            isLargeText = false;
+            isScreenReader = false;
+            document.body.classList.remove('high-contrast', 'large-text');
+            showToast('Accessibility settings reset', 'success');
+        }
+
+        function announceToScreenReader(message) {
+            if (isScreenReader) {
+                const announcement = document.createElement('div');
+                announcement.setAttribute('role', 'status');
+                announcement.setAttribute('aria-live', 'polite');
+                announcement.className = 'sr-only';
+                announcement.textContent = message;
+                document.body.appendChild(announcement);
+                setTimeout(() => announcement.remove(), 1000);
+            }
+        }
+
+        // Journal Dropdown Functions
+        function toggleJournalDropdown(event) {
+            event.preventDefault();
+            const dropdown = document.getElementById('journalDropdown');
+            dropdown.classList.toggle('show');
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function closeDropdown(e) {
+                if (!event.target.closest('.dropdown')) {
+                    dropdown.classList.remove('show');
+                    document.removeEventListener('click', closeDropdown);
+                }
+            });
+        }
+
+        function showSubscribedJournals(event) {
+            event.preventDefault();
+            document.getElementById('journalDropdown').classList.remove('show');
+            filterResources('secondary');
+            document.getElementById('resources').scrollIntoView({ behavior: 'smooth' });
+            showToast('Showing Subscribed Journals: SAGE, Taylor & Francis, JSTOR, EBSCOhost', 'success');
+        }
+
+        function showOpenAccessJournals(event) {
+            event.preventDefault();
+            document.getElementById('journalDropdown').classList.remove('show');
+            filterResources('open');
+            document.getElementById('resources').scrollIntoView({ behavior: 'smooth' });
+            showToast('Showing Open Access Journals', 'success');
+        }
+
+        // Login Modal
+        function openLoginModal(type) {
+            loginType = type;
+            const modal = document.getElementById('loginModal');
+            const title = document.getElementById('modalTitle');
+            const subtitle = document.getElementById('modalSubtitle');
+            const roleSelect = document.getElementById('roleSelect');
+            
+            if (type === 'admin') {
+                title.textContent = 'Administrator Login';
+                subtitle.textContent = 'Secure access to system management';
+                roleSelect.style.display = 'none';
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            } else {
+                title.textContent = 'Student Login';
+                subtitle.textContent = 'Access your personalized legal research workspace';
+                roleSelect.style.display = 'block';
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        function togglePassword() {
+            const password = document.getElementById('password');
+            const icon = document.querySelector('.toggle-password i');
+            
+            if (password.type === 'password') {
+                password.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                password.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const role = loginType === 'admin' ? 'admin' : document.getElementById('role').value;
+
+            // Validate credentials
+            if (role === 'admin' && username === 'Nelson Samwel' && password === 'ManayarA@1996') {
+                currentUser = username;
+                userRole = 'admin';
+                closeLoginModal();
+                showAdminDashboard();
+                showToast('Welcome back, Administrator Nelson Samwel', 'success');
+            } else if (role === 'student') {
+                currentUser = username;
+                userRole = 'student';
+                closeLoginModal();
+                showUserDashboard();
+                showToast(`Welcome, ${username}`, 'success');
+            } else {
+                showToast('Invalid credentials. Please try again.', 'error');
+            }
+        }
+
+        function simulateBiometric() {
+            showToast('Initializing biometric scanner...', 'warning');
+            setTimeout(() => {
+                showToast('Biometric authentication successful', 'success');
+                if (loginType === 'admin') {
+                    currentUser = 'Nelson Samwel';
+                    userRole = 'admin';
+                    closeLoginModal();
+                    showAdminDashboard();
+                } else {
+                    closeLoginModal();
+                    showUserDashboard();
+                }
+            }, 2000);
+        }
+
+        function showAdminDashboard() {
+            document.getElementById('mainContent').style.display = 'none';
+            document.querySelector('.footer').style.display = 'none';
+            document.getElementById('adminDashboard').classList.add('active');
+            document.getElementById('userDashboard').classList.remove('active');
+        }
+
+        function showUserDashboard() {
+            document.getElementById('mainContent').style.display = 'none';
+            document.querySelector('.footer').style.display = 'none';
+            document.getElementById('userDashboard').classList.add('active');
+            document.getElementById('adminDashboard').classList.remove('active');
+        }
+
+        function logout() {
+            currentUser = null;
+            userRole = null;
+            document.getElementById('mainContent').style.display = 'block';
+            document.querySelector('.footer').style.display = 'block';
+            document.getElementById('adminDashboard').classList.remove('active');
+            document.getElementById('userDashboard').classList.remove('active');
+            showToast('Logged out successfully', 'success');
+        }
+
+        function showSection(section) {
+            if (section === 'home') {
+                document.getElementById('mainContent').style.display = 'block';
+                document.querySelector('.footer').style.display = 'block';
+                document.getElementById('adminDashboard').classList.remove('active');
+                document.getElementById('userDashboard').classList.remove('active');
+            }
+        }
+
+        // AI Assistant
+        function toggleAIPanel() {
+            const panel = document.getElementById('aiPanel');
+            const icon = document.getElementById('aiMinimizeIcon');
+            
+            panel.classList.toggle('minimized');
+            
+            if (panel.classList.contains('minimized')) {
+                icon.classList.remove('fa-minus');
+                icon.classList.add('fa-plus');
+            } else {
+                icon.classList.remove('fa-plus');
+                icon.classList.add('fa-minus');
+            }
+        }
+
+        function handleAIInput(event) {
+            if (event.key === 'Enter') {
+                sendAIMessage();
+            }
+        }
+
+        function sendAIMessage() {
+            const input = document.getElementById('aiInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Simulate AI response
+            setTimeout(() => {
+                const response = generateAIResponse(message);
+                addMessage(response, 'bot');
+            }, 1000);
+        }
+
+        function addMessage(text, sender) {
+            const messages = document.getElementById('aiMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message ${sender}`;
+            messageDiv.textContent = text;
+            messages.appendChild(messageDiv);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function generateAIResponse(message) {
+            const lowerMsg = message.toLowerCase();
+            
+            if (lowerMsg.includes('tanzlii') || lowerMsg.includes('tanzania law')) {
+                return 'TanzLII (tanzlii.org) provides free access to Tanzanian case law, legislation, and government gazettes. It includes High Court decisions, Court of Appeal judgments, and the Tanzania Law Reports. Would you like me to guide you to a specific section?';
+            } else if (lowerMsg.includes('journal') || lowerMsg.includes('article')) {
+                return 'We have access to premium journals through JSTOR, SAGE, and Taylor & Francis, plus many open access journals like the Leiden Journal of International Law and Cambridge International Law Journal. Which area of law are you researching?';
+            } else if (lowerMsg.includes('textbook') || lowerMsg.includes('book') || lowerMsg.includes('e-book')) {
+                return 'EBSCOhost provides access to thousands of legal textbooks and treatises. You can search by subject, author, or title. The collection covers constitutional law, criminal law, commercial law, and more.';
+            } else if (lowerMsg.includes('human rights')) {
+                return 'The Tanzania Human Rights Commission Resources Center (humanrights.or.tz/resources-center) provides UPR reports, treaty monitoring documents, advocacy materials, and annual reports on the human rights situation in Tanzania.';
+            } else if (lowerMsg.includes('african') || lowerMsg.includes('ajol')) {
+                return 'African Journals Online (AJOL) is available with over 268 open access journals and 165,000+ full text articles from across Africa. It is an excellent resource for African legal research and scholarship.';
+            } else if (lowerMsg.includes('repository') || lowerMsg.includes('thesis') || lowerMsg.includes('dissertation')) {
+                return 'The OUT Institutional Repository (repository.out.ac.tz) contains theses, dissertations, and faculty publications from Open University of Tanzania. It is the official archive of OUT scholarly output.';
+            } else if (lowerMsg.includes('catalogue') || lowerMsg.includes('koha') || lowerMsg.includes('library')) {
+                return 'The OUT Library Catalogue (koha.out.ac.tz) allows you to search for physical and digital collections, manage loans, renewals, and holds through the OPAC interface.';
+            } else if (lowerMsg.includes('hello') || lowerMsg.includes('hi')) {
+                return 'Hello! I can help you navigate our legal resources. Try asking about specific databases like TanzLII, EBSCOhost, JSTOR, or ask about specific areas of law like constitutional law, human rights, or international law.';
+            } else {
+                return 'I can help you navigate our legal resources. Try asking about specific databases like TanzLII, EBSCOhost, or JSTOR, or ask about specific areas of law like constitutional law, human rights, or international law. You can also ask about African research through AJOL or OUT resources.';
+            }
+        }
+
+        function activateAIAssist() {
+            const searchBox = document.getElementById('mainSearch');
+            searchBox.placeholder = 'AI is ready to assist... Describe what you need';
+            searchBox.focus();
+            showToast('AI Assist activated. Describe your research needs.', 'success');
+        }
+
+        // Voice Search
+        function startVoiceSearch() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const recognition = new SpeechRecognition();
+                
+                recognition.lang = 'en-US';
+                recognition.start();
+                
+                showToast('Listening... Speak now', 'warning');
+                
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('mainSearch').value = transcript;
+                    showToast(`Heard: "${transcript}"`, 'success');
+                };
+                
+                recognition.onerror = () => {
+                    showToast('Voice recognition error. Please try again.', 'error');
+                };
+            } else {
+                showToast('Voice search not supported in this browser', 'error');
+            }
+        }
+
+        // Search Functions
+        function setSearchType(type) {
+            document.querySelectorAll('.search-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            const placeholder = {
+                'all': 'Search legal resources, cases, legislation, journals...',
+                'cases': 'Search court decisions and case law...',
+                'legislation': 'Search acts, bills, and regulations...',
+                'journals': 'Search academic articles and papers...',
+                'textbooks': 'Search textbooks and legal commentaries...'
+            };
+            
+            document.getElementById('mainSearch').placeholder = placeholder[type];
+        }
+
+        function quickSearch(term) {
+            document.getElementById('mainSearch').value = term;
+            showToast(`Searching for: ${term}`, 'success');
+            
+            // Scroll to resources
+            document.getElementById('resources').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Resource Filtering
+        function filterResources(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            const cards = document.querySelectorAll('.resource-card');
+            
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    card.classList.add('fade-in');
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Toast Notifications
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const icon = toast.querySelector('i');
+            
+            toast.className = 'toast ' + type;
+            toastMessage.textContent = message;
+            
+            if (type === 'success') icon.className = 'fas fa-check-circle';
+            else if (type === 'error') icon.className = 'fas fa-exclamation-circle';
+            else if (type === 'warning') icon.className = 'fas fa-exclamation-triangle';
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Track Resource Access
+        function trackAccess(resource) {
+            console.log(`Access tracked: ${resource} at ${new Date().toISOString()}`);
+            showToast(`Opening ${resource}...`, 'success');
+        }
+
+        // Admin Section Navigation
+        function showAdminSection(section) {
+            document.querySelectorAll('.admin-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            const content = document.getElementById('adminContent');
+            
+            const sections = {
+                'overview': `
+                    <div class="stats-grid">
+                        <div class="admin-stat"><div class="stat-label">Total Users</div><div class="admin-stat-value">12,847</div></div>
+                        <div class="admin-stat"><div class="stat-label">Active Sessions</div><div class="admin-stat-value">342</div></div>
+                        <div class="admin-stat"><div class="stat-label">Resources Accessed</div><div class="admin-stat-value">45,231</div></div>
+                        <div class="admin-stat"><div class="stat-label">AI Queries</div><div class="admin-stat-value">8,945</div></div>
+                    </div>
+                    <h3 style="margin-bottom: 1rem;">System Status</h3>
+                    <div style="background: var(--bg-dark); border-radius: 12px; padding: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                            <span>All systems operational</span>
+                            <span style="margin-left: auto; color: var(--text-secondary);">99.9% uptime</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <i class="fas fa-database" style="color: var(--success);"></i>
+                            <span>Database connections active</span>
+                            <span style="margin-left: auto; color: var(--text-secondary);">12/12 connected</span>
+                        </div>
+                        <div style="display: flex; align-items: center: 1rem;">
+                            <i class="fas fa-robot" style="color: var(--success);"></i>
+                            <span>AI Assistant operational</span>
+                            <span style="margin-left: auto; color: var(--text-secondary);">Response time: 1.2s</span>
+                        </div>
+                    </div>
+                `,
+                'users': '<h3>User Management</h3><p>User management interface would display here with CRUD operations.</p>',
+                'resources': '<h3>Resource Management</h3><p>Resource configuration and monitoring interface.</p>',
+                'analytics': '<h3>Analytics Dashboard</h3><p>Detailed usage analytics and reporting interface.</p>',
+                'accessibility': '<h3>Accessibility Monitor</h3><p>Accessibility compliance monitoring and user assistance logs.</p>',
+                'settings': '<h3>System Settings</h3><p>Portal configuration and system settings.</p>'
+            };
+            
+            content.innerHTML = sections[section] || sections['overview'];
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLoginModal();
+                document.getElementById('journalDropdown').classList.remove('show');
+            }
+            if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                document.getElementById('mainSearch').focus();
+            }
+        });
+    </script>
+</body>
+</html>
